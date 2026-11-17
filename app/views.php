@@ -30,10 +30,10 @@ function page(string $title, string $body, bool $admin = false, string $active =
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="Logbook kunjungan Data Center MIS.">
     <title><?= e($title) ?> · Logbook Tamu MIS</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/assets/tailwind.css">
     <script src="/assets/app.js" defer></script>
 </head>
-<body class="<?= $admin ? 'is-admin' : 'is-guest' ?>">
+<body class="min-h-screen flex flex-col <?= $admin ? 'is-admin' : 'is-guest' ?>">
 <?php if ($admin): ?>
     <div class="topbar"><div class="topbar-inner"><span><i class="status-dot"></i> Logbook Tamu MIS (Admin Panel)</span><a href="/">Buka Tampilan Tamu ↗</a></div></div>
 <?php endif ?>

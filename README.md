@@ -2,6 +2,8 @@
 
 Aplikasi buku tamu responsif dengan PHP 8.2+, PDO, dan MySQL Community Server 8.4. Antarmuka berbahasa Indonesia dan menggunakan zona waktu `Asia/Jakarta`.
 
+Antarmuka menggunakan Tailwind CSS 4. Sumbernya berada di `public/assets/tailwind-source.css`, dengan aturan komponen khusus di `public/assets/style.css`. File `public/assets/tailwind.css` adalah hasil build yang disajikan aplikasi dan disimpan di repository, sehingga Node.js tidak diperlukan saat menjalankan PHP di server.
+
 ## Rute
 
 - `/` untuk tamu: satu formulir kunjungan yang diisi saat akan keluar dari Data Center.
@@ -17,6 +19,8 @@ Tidak ada halaman admin, akun administrator, CRUD manual, atau autentikasi sesi.
 4. Buat akun database aplikasi dan perbarui `.env`: `php scripts/configure-mysql.php`.
 5. Pasang dependensi: `composer install`.
 6. Jalankan lokal: `php -S 127.0.0.1:8000 -t public`, lalu buka `http://127.0.0.1:8000`.
+
+Jika mengubah tampilan, jalankan `npm ci` sekali lalu `npm run build:css`. Selama pengembangan dapat memakai `npm run watch:css`. Commit hasil build `public/assets/tailwind.css` bersama perubahan sumbernya; folder `node_modules/` diabaikan oleh Git.
 
 `APP_URL` perlu mengarah ke alamat HTTPS/intranet yang dapat dijangkau ponsel tamu agar QR formulir bekerja.
 
