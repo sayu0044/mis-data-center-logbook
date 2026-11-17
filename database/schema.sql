@@ -1,0 +1,23 @@
+CREATE DATABASE IF NOT EXISTS mis_logbook CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE mis_logbook;
+
+CREATE TABLE IF NOT EXISTS visits (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  visit_code_hash CHAR(64) NULL UNIQUE,
+  visit_date DATE NOT NULL,
+  visitor_name VARCHAR(150) NOT NULL,
+  company VARCHAR(150) NULL,
+  person_to_meet VARCHAR(150) NOT NULL,
+  purpose TEXT NOT NULL,
+  check_in_time TIME NOT NULL,
+  check_out_time TIME NULL,
+  checkin_recorded_at DATETIME NOT NULL,
+  checkout_recorded_at DATETIME NULL,
+  created_by VARCHAR(20) NOT NULL DEFAULT 'public',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL,
+  INDEX idx_visits_date (visit_date), INDEX idx_visits_active (deleted_at, visit_date),
+  INDEX idx_visits_name (visitor_name),
+  CONSTRAINT chk_created_by CHECK (created_by IN ('public','admin'))
+) ENGINE=InnoDB;

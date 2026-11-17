@@ -1,0 +1,9 @@
+/vendor/
+/.env
+/.runtime/
+/.playwright-mcp/
+/.*-test-cookie.txt
+/.xlsx-check
+/.xlsx-headers.txt
+/storage/logs/*
+!/storage/logs/.gitkeep

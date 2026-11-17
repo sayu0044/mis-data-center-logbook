@@ -1,0 +1,12 @@
+{
+  "name": "mis/data-center-logbook",
+  "description": "Buku tamu digital Data Center MIS",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.2",
+    "phpoffice/phpspreadsheet": "^2.2 || ^3.0",
+    "endroid/qr-code": "^5.0"
+  },
+  "config": {"sort-packages": true, "optimize-autoloader": true}
+}
