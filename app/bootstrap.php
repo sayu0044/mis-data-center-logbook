@@ -13,7 +13,7 @@ require_once __DIR__ . '/views.php';
 require_once __DIR__ . '/history.php';
 function visit_data():array{
     $d=[];
-    foreach(['visit_date','visitor_name','company','person_to_meet','purpose','check_in_time','check_out_time'] as $key){
+    foreach(['visit_date','visitor_nik','visitor_name','company','person_to_meet','purpose','check_in_time','check_out_time'] as $key){
         $d[$key]=trim((string)($_POST[$key]??''));
     }
     $date=DateTime::createFromFormat('!Y-m-d',$d['visit_date']);
@@ -24,9 +24,10 @@ function visit_data():array{
     if($d['check_out_time']<$d['check_in_time']){
         throw new InvalidArgumentException('Jam keluar tidak boleh mendahului jam masuk pada tanggal kunjungan yang sama.');
     }
-    foreach(['visitor_name'=>150,'company'=>150,'person_to_meet'=>150,'purpose'=>3000] as $key=>$max){
+    foreach(['visitor_nik'=>64,'visitor_name'=>150,'company'=>150,'person_to_meet'=>150,'purpose'=>3000] as $key=>$max){
         if(mb_strlen($d[$key])>$max)throw new InvalidArgumentException('Isian terlalu panjang.');
     }
+    $d['visitor_nik']=$d['visitor_nik']?:null;
     $d['company']=$d['company']?:null;
     $d['check_in_time'].=':00';
     $d['check_out_time'].=':00';

@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       dialog.querySelectorAll('.dialog-message').forEach((message) => message.remove());
       dialog.showModal();
-      setVisitEditing(dialog, true);
+      setVisitEditing(dialog, false);
     });
   });
   const setVisitEditing = (dialog, editing) => {
@@ -35,8 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const view = dialog.querySelector('.dialog-visit-view');
     if (view) view.hidden = editing;
     form.hidden = !editing;
+    const editButton = dialog.querySelector('[data-edit-visit]');
+    if (editButton) editButton.hidden = editing;
     if (editing) form.querySelector('input:not([type="hidden"])')?.focus();
   };
+  document.querySelectorAll('[data-edit-visit]').forEach((button) => {
+    button.addEventListener('click', () => setVisitEditing(button.closest('dialog'), true));
+  });
   document.querySelectorAll('[data-cancel-visit]').forEach((button) => {
     button.addEventListener('click', () => {
       const dialog = button.closest('dialog');
@@ -68,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       visit_date_label: visit.visit_date_label,
       check_in_time: visit.check_in_time,
       visitor_name: visit.visitor_name,
+      visitor_nik: visit.visitor_nik_display,
       company_display: visit.company_display,
       person_to_meet: visit.person_to_meet,
       purpose: visit.purpose,
@@ -88,8 +94,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const action = row.querySelector('[data-dialog-open]');
     if (action) action.setAttribute('aria-label', `Edit kunjungan ${visit.visitor_name}`);
   };
+  const updateVisitDialog = (dialog, visit) => {
+    if (!dialog) return;
+    Object.entries({
+      visit_date_label: `#${visit.id} · ${visit.visit_date_label}`,
+      check_in_time: visit.check_in_time,
+      check_out_time: visit.check_out_time || '—',
+      visitor_name: visit.visitor_name,
+      visitor_nik: visit.visitor_nik_display,
+      company_display: visit.company_display,
+      person_to_meet: visit.person_to_meet,
+      visit_status: visit.complete ? 'Lengkap' : 'Belum lengkap',
+      purpose: visit.purpose,
+    }).forEach(([field, value]) => {
+      const element = dialog.querySelector(`[data-detail="${field}"]`);
+      if (element) element.textContent = value;
+    });
+  };
   const commitFormValues = (form, visit) => {
-    ['visit_date', 'visitor_name', 'company', 'person_to_meet', 'purpose', 'check_in_time', 'check_out_time'].forEach((field) => {
+    ['visit_date', 'visitor_name', 'visitor_nik', 'company', 'person_to_meet', 'purpose', 'check_in_time', 'check_out_time'].forEach((field) => {
       const input = form.elements.namedItem(field);
       if (!input) return;
       const value = visit[field] ?? '';
@@ -112,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json().catch(() => ({ ok: false, message: 'Respons server tidak dapat dibaca.' }));
         if (!response.ok || !data.ok) throw new Error(data.message || 'Perubahan belum dapat disimpan.');
         updateVisitRow(data.visit);
+        updateVisitDialog(dialog, data.visit);
         commitFormValues(form, data.visit);
         dialog?.close();
         showHistoryFlash('success', data.message);
@@ -143,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialog = document.getElementById(`visit-dialog-${openVisitId}`);
     if (dialog && typeof dialog.showModal === 'function') {
       dialog.showModal();
-      setVisitEditing(dialog, true);
+      setVisitEditing(dialog, dialog.hasAttribute('data-open-edit'));
     }
   }
 });

@@ -1,10 +1,8 @@
-CREATE DATABASE IF NOT EXISTS mis_logbook CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE mis_logbook;
-
 CREATE TABLE IF NOT EXISTS visits (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   visit_code_hash CHAR(64) NULL UNIQUE,
   visit_date DATE NOT NULL,
+  visitor_nik VARCHAR(64) NULL,
   visitor_name VARCHAR(150) NOT NULL,
   company VARCHAR(150) NULL,
   person_to_meet VARCHAR(150) NOT NULL,
